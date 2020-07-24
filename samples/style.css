@@ -1,0 +1,35 @@
+body {
+    text-align: center;
+}
+
+canvas {
+    width:100%;
+}
+
+div.container {
+    display: flex;
+}
+
+div.group {
+    display: inline-block;
+}
+
+div.sample {
+    align-self: center;
+    border: 1px solid #ddd;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+div span {
+    position: absolute;
+}
+
+.center {
+    text-align: center;
+}
+
+.title {
+    font-weight: bold;
+    text-transform: uppercase;
+}

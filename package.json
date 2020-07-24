@@ -1,0 +1,11 @@
+{
+  "name": "polyavatar",
+  "version": "0.0.1",
+  "description": "Generate polygon avatars",
+  "main": "polyavatar.js",
+  "keyaords": [
+    "vanilla", "avatar", "canvas"
+  ],
+  "author": "Daniel Gomes",
+  "license": "MIT"
+}
