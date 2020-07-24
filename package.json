@@ -4,7 +4,7 @@
   "description": "Generate polygon avatars",
   "main": "polyavatar.js",
   "repository: "https://github.com/programad/polyavatar",
-  "keyaords": [
+  "keywords": [
     "vanilla", "avatar", "canvas"
   ],
   "author": "Daniel Gomes",
