@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Generate polygon avatars",
   "main": "polyavatar.js",
+  "repository: "https://github.com/programad/polyavatar",
   "keyaords": [
     "vanilla", "avatar", "canvas"
   ],
