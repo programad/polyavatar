@@ -1,0 +1,2 @@
+# polyavatar
+Generate polygonal avatars
