@@ -12,5 +12,8 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/programad/polyavatar/issues"
-  }
+  },
+  "files": [
+    "src/*"
+  ]
 }
