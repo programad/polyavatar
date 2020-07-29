@@ -29,7 +29,7 @@ var newInstance = new PolygonAvatar({
 
 The plugin can be configured using the one of a combination of the following options:
 
-| Parameter        |                                             Description                                             |  Default  | Mandatory |
+| Parameter        |  Default  | Mandatory |                                             Description                                             |
 |------------------|:---------------------------------------------------------------------------------------------------|:---------:|:---------:|
 | selector         |     ''    |     x     | A CSS selector to the destination canvas to render.                                                 |
 | sides            |     6     |           | How many sides (more than 2, of course) the polygon should have.                                    |
