@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: autominify
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -19,15 +19,15 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        
       - name: Auto Minify
         uses: nizarmah/auto-minify@v1.9
         with:
-          # Directory that contains the files you want to minify. Defaults to current directory (.)
-          directory: src
-          # Directory that contains the minified files. Defaults to same directory
-          output: src 
-          # Descend at most levels (a non-negative integer) levels of directories below the starting-points.
-          maxdepth: 1
-          # Specifies which of the supported packages minifies JS files.
-          js_engine: babel
+          directory: 'src'
+          
+      - name: Auto committing minified files
+        uses: stefanzweifel/git-auto-commit-action@v4.4.0
+        with:
+          commit_message: "Github Action: Auto Minified JS and CSS files"
+          branch: ${{ github.ref }}  
