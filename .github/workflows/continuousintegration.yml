@@ -24,7 +24,7 @@ jobs:
         with:
           commit_message: "Github Action: Auto Minified JS and CSS files"
           branch: ${{ github.ref }}  
-  publish:
+  release:
     runs-on: ubuntu-latest
     needs: [ minify ]
     steps:
