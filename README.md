@@ -2,6 +2,10 @@
   <img src="docs/polyavatarlogo.svg" />
 </p>
 
+![ci](https://github.com/programad/polyavatar/workflows/continuous%20integration/badge.svg)
+![npm](https://img.shields.io/npm/v/polyavatar)
+
+
 # What it is
 Simple plygin to generate polygonal avatars with customization options.
 
