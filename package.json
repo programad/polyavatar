@@ -1,12 +1,16 @@
 {
   "name": "polyavatar",
   "version": "0.0.1",
-  "description": "Generate polygon avatars",
-  "main": "polyavatar.js",
-  "repository": "https://github.com/programad/polyavatar",
+  "description": "Simple plygin to generate polygonal avatars with customization options.",
+  "main": "src/polyavatar.js",
+  "repository": "github:programad/polyavatar",
+  "homepage": "https://programad.github.io/polyavatar/",
   "keywords": [
-    "vanilla", "avatar", "canvas"
+    "js", "javascript", "vanillajs", "vanilla", "avatar", "canvas"
   ],
   "author": "Daniel Gomes",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/programad/polyavatar/issues"
+  }
 }
