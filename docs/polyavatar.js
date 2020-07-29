@@ -12,8 +12,8 @@
 }(this, function (pluginName) {
 
   'use strict';
+  var progressBarColor = '#4ff461';
 
-  var bgImage = '';
   var defaults = {
     selector: '.polyavatar',
     classToAdd: "loaded",
@@ -22,10 +22,12 @@
     rotation: -Math.PI * 0.5,
     image: '',
     animated: true,
-    withImage: true,
-    withProgress: true,
-    border: true
+    hasImage: false,
+    showProgress: true,
+    border: true,
+    progressBarColor: progressBarColor
   };
+
   /**
    * Merge defaults with user options
    * @param {Object} defaults Default settings
@@ -77,14 +79,12 @@
       img.src = bg;
     }
 
-    if (bgImage !== '') {
-      if (img.complete) {
+    if (img.complete) {
+      setImageBackground(canvas, width, ctx, img, outerSpace);
+    } else {
+      img.onload = function () {
         setImageBackground(canvas, width, ctx, img, outerSpace);
-      } else {
-        img.onload = function () {
-          setImageBackground(canvas, width, ctx, img, outerSpace);
-        };
-      }
+      };
     }
 
     return img;
@@ -122,12 +122,29 @@
       p1 = path[i++],
       p2 = path[i];
     const len = path.length
+    ctx.lineCap = 'butt';
     ctx.moveTo((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
     while (i <= len) {
       p1 = p2;
       p2 = path[(++i) % len];
       ctx.arcTo(p1.x, p1.y, (p1.x + p2.x) / 2, (p1.y + p2.y) / 2, width / radius);
     }
+  }
+
+  function drawCircle(ctx, centerX, centerY, radius, style, borderColor) {
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+    ctx.fillStyle = style;
+    ctx.fill();
+
+    ctx.lineWidth = radius / 10;
+    if (borderColor === undefined) {
+      ctx.strokeStyle = shadeColor(ctx.fillStyle, -30);
+    } else {
+      ctx.strokeStyle = borderColor;
+    }
+
+    ctx.stroke();
   }
 
   var strokeRoundedPath = function (ctx, cx, cy, path, width, radius, style, barWidth) {
@@ -141,44 +158,99 @@
     ctx.stroke();
   }
 
-  var fillRoundedPath = function (canvas, ctx, img, outerSpace, cx, cy, path, width, radius, style, renderImage) {
+  var fillRoundedPath = function (canvas, ctx, outerSpace, cx, cy, path, width, radius, style, img) {
     ctx.setTransform(1, 0, 0, 1, cx, cy);
     ctx.fillStyle = style;
     ctx.beginPath();
     roundedPath(ctx, path, width, radius);
     ctx.fill();
 
-    if (renderImage) {
+    if (img !== undefined) {
       setImageBackground(canvas, width, ctx, img, outerSpace);
     }
   }
 
-  var render = function (canvas, ctx, img, outerSpace, animated, polyRadius, bgPoly, hexPoly, hexPolyInner, hexBar, width, barWidth, inset, approxLineLen, cornerRadius, withImage, withProgress, percentage, progress) {
+  var fillStatusCircle = function (canvas, ctx, cx, cy, radius, style, borderColor) {
+    ctx.lineDashOffset = 1;
+    var centerX = canvas.width / 4;
+    var centerY = canvas.height - (canvas.height / 4);
+
+    ctx.setTransform(1, 0, 0, 1, cx, cy);
+    drawCircle(ctx, centerX, centerY, radius, style, borderColor);
+  }
+
+  var fillLevelCircle = function (canvas, ctx, cx, cy, radius, style) {
+    ctx.lineDashOffset = 1;
+    var centerX = canvas.width - (canvas.width / 4);
+    var centerY = canvas.height / 4;
+
+    ctx.setTransform(1, 0, 0, 1, cx, cy);
+    drawCircle(ctx, centerX, centerY, radius, style);
+  }
+
+
+  function fillLevelNumber(ctx, number, pos, miniPolygonRadius) {
+      ctx.setTransform(1, 0, 0, 1, pos, pos);
+      ctx.font = miniPolygonRadius + "px Arial";
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.fillText(number, 0 - miniPolygonRadius / 2, 0 + miniPolygonRadius / 2.5);
+      ctx.fill();
+  }
+
+  function shadeColor(color, amount) {
+    return '#' + color.replace(/^#/, '').replace(/../g, color => ('0' + Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
+  }
+
+  var render = function (canvas, ctx, options, outerSpace, polyRadius, bgPoly, hexPoly, hexPolyInner, hexBar, width, barWidth, inset, cornerRadius, approxLineLen, percentage, progress) {
+    if (percentage === undefined && progress == undefined) {
+      progress = 0.0;
+      percentage = setPercentage(canvas, options.percentage);
+    }
+
     var currentProgress = progress % 1;
-    if (animated === false) {
+    if (options.animated === false) {
       currentProgress = percentage;
     }
+    //console.log(options)
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    fillRoundedPath(canvas, ctx, img, outerSpace, polyRadius, polyRadius, bgPoly, width, cornerRadius, "#1d2333");
-    fillRoundedPath(canvas, ctx, img, outerSpace, polyRadius, polyRadius, hexPoly, width, cornerRadius, "#293249");
-    fillRoundedPath(canvas, ctx, img, outerSpace, polyRadius, polyRadius, hexPolyInner, width, cornerRadius - barWidth * inset * 2, "#000", withImage);
+    fillRoundedPath(canvas, ctx, outerSpace, polyRadius, polyRadius, bgPoly, width, cornerRadius, "#1d2333");
+    fillRoundedPath(canvas, ctx, outerSpace, polyRadius, polyRadius, hexPoly, width, cornerRadius, "#293249");
+    fillRoundedPath(canvas, ctx, outerSpace, polyRadius, polyRadius, hexPolyInner, width, cornerRadius - barWidth * inset * 2, "#000", options.img);
     ctx.lineDashOffset = approxLineLen - currentProgress * approxLineLen;
 
-    if (withProgress === true) {
-      if (animated === true) {
-        strokeRoundedPath(ctx, polyRadius, polyRadius, hexBar, width, cornerRadius - barWidth * inset, "#3e8a2b", barWidth);
+    if (options.showProgress === true) {
+      if (options.animated === true) {
+        strokeRoundedPath(ctx, polyRadius, polyRadius, hexBar, width, cornerRadius - barWidth * inset, progressBarColor, barWidth);
 
         if (currentProgress < percentage) {
           progress += 0.01;
           requestAnimationFrame(function () {
-            render(canvas, ctx, img, outerSpace, animated, polyRadius, bgPoly, hexPoly, hexPolyInner, hexBar, width, barWidth, inset, approxLineLen, cornerRadius, withImage, withProgress, percentage, progress);
+            render(canvas, ctx, options, outerSpace, polyRadius, bgPoly, hexPoly, hexPolyInner, hexBar, width, barWidth, inset, cornerRadius, approxLineLen, percentage, progress);
           });
         }
       } else {
-        strokeRoundedPath(ctx, polyRadius, polyRadius, hexBar, width, cornerRadius - barWidth * inset, "#3e8a2b", barWidth);
+        strokeRoundedPath(ctx, polyRadius, polyRadius, hexBar, width, cornerRadius - barWidth * inset, progressBarColor, barWidth);
       }
+    }
+
+    if (options.online !== undefined) {
+      var borderColor = outerSpace > 0 ? "#1d2333" : "#293249";
+      fillStatusCircle(canvas, ctx, 0, 0, canvas.width / 12, (options.online ? 'green' : 'gray'), borderColor);
+    }
+    //fillLevelCircle(canvas, ctx, 0, 0, canvas.width/10, "#1d2333");
+
+    if (options.sides > 4 && outerSpace > 0 && options.levelNumber > 0) {
+      var miniPolygonRadius = polyRadius / 3;
+      var miniInnerPolygonRadius = miniPolygonRadius * 0.8;
+      var pos = width - (width / 3.65);
+      const bgLevelNumber = polygon(options.sides, miniPolygonRadius, 1, options.rotation);
+      const bgLevelNumberInner = polygon(options.sides, miniInnerPolygonRadius, 1, options.rotation);
+      fillRoundedPath(canvas, ctx, outerSpace, pos, pos, bgLevelNumber, width, cornerRadius, "#1d2333");
+      fillRoundedPath(canvas, ctx, outerSpace, pos, pos, bgLevelNumberInner, width, cornerRadius, "#7750f8");
+      fillLevelNumber(ctx, options.levelNumber, pos, miniPolygonRadius);
     }
   }
 
@@ -214,17 +286,18 @@
       // makes `.selectors` object available to instance.
       this.elements = document.querySelectorAll(this.options.selector);
 
-      this.withImage = this.options.image !== '';
-      bgImage = this.options.image;
-
+      this.options.hasImage = this.options.image !== '';
       if (this.options.sides < 3) {
         this.options.sides = 3;
       }
 
+      if (this.options.progressBarColor !== progressBarColor) {
+        progressBarColor = this.options.progressBarColor;
+      }
+
+
       for (var i = 0; i < this.elements.length; i++) {
         const canvas = this.elements[i];
-
-        var perc = setPercentage(canvas, this.options.percentage);
         canvas.classList.add(this.options.classToAdd);
 
         const width = canvas.width;
@@ -246,16 +319,14 @@
         const ctx = canvas.getContext("2d");
         ctx.setLineDash([approxLineLen]);
 
-        var img;
         var obj = this;
-        if (this.withImage === true) {
-          img = setImg(this.options.image, canvas, width, ctx, outerSpace);
-          img.onload = function (x) {
-            perc = setPercentage(canvas, obj.options.percentage);
-            render(canvas, ctx, img, outerSpace, obj.options.animated, polyRadius, bgPoly, hexPoly, hexPolyInner, hexBar, width, barWidth, inset, approxLineLen, cornerRadius, obj.withImage, obj.options.withProgress, perc, 0.0);
+        if (obj.options.hasImage === true) {
+          obj.options.img = setImg(obj.options.image, canvas, width, ctx, outerSpace);
+          obj.options.img.onload = function (x) {
+            render(canvas, ctx, obj.options, outerSpace, polyRadius, bgPoly, hexPoly, hexPolyInner, hexBar, width, barWidth, inset, cornerRadius, approxLineLen);
           }
         } else {
-          render(canvas, ctx, img, outerSpace, obj.options.animated, polyRadius, bgPoly, hexPoly, hexPolyInner, hexBar, width, barWidth, inset, approxLineLen, cornerRadius, obj.withImage, obj.options.withProgress, perc, 0.0);
+          render(canvas, ctx, obj.options, outerSpace, polyRadius, bgPoly, hexPoly, hexPolyInner, hexBar, width, barWidth, inset, cornerRadius, approxLineLen);
         }
       }
     }, // #! init
