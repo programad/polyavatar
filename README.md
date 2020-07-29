@@ -3,7 +3,7 @@
 </p>
 
 ![ci](https://github.com/programad/polyavatar/workflows/continuous%20integration/badge.svg)
-![npm](https://img.shields.io/npm/v/polyavatar)
+[![npm](https://img.shields.io/npm/v/polyavatar)](https://www.npmjs.com/package/polyavatar)
 
 
 # What it is
