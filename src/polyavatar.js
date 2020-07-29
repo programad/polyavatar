@@ -239,7 +239,6 @@
       var borderColor = outerSpace > 0 ? "#1d2333" : "#293249";
       fillStatusCircle(canvas, ctx, 0, 0, canvas.width / 12, (options.online ? '#40d04f' : 'gray'), borderColor);
     }
-    //fillLevelCircle(canvas, ctx, 0, 0, canvas.width/10, "#1d2333");
 
     if (options.sides > 4 && outerSpace > 0 && options.levelNumber > 0) {
       var miniPolygonRadius = polyRadius / 3;
