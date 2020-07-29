@@ -137,7 +137,7 @@
     ctx.fillStyle = style;
     ctx.fill();
 
-    ctx.lineWidth = radius / 10;
+    ctx.lineWidth = radius / 4.5;
     if (borderColor === undefined) {
       ctx.strokeStyle = shadeColor(ctx.fillStyle, -30);
     } else {
@@ -238,7 +238,7 @@
 
     if (options.online !== undefined) {
       var borderColor = outerSpace > 0 ? "#1d2333" : "#293249";
-      fillStatusCircle(canvas, ctx, 0, 0, canvas.width / 12, (options.online ? 'green' : 'gray'), borderColor);
+      fillStatusCircle(canvas, ctx, 0, 0, canvas.width / 12, (options.online ? '#40d04f' : 'gray'), borderColor);
     }
     //fillLevelCircle(canvas, ctx, 0, 0, canvas.width/10, "#1d2333");
 
