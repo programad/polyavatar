@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Semantic Release
+name: semanticrelease
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -19,10 +19,14 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
-
-    - name: Action For Semantic Release
-      uses: cycjimmy/semantic-release-action@v2.5.0
-      with:
-        branch: 'master'
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: Semantic Release
+      uses: cycjimmy/semantic-release-action@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
+      with: 
+        branches: 'master'
