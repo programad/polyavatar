@@ -2,7 +2,7 @@
   <img src="docs/polyavatarlogo.svg" />
 </p>
 
-![ci](https://github.com/programad/polyavatar/workflows/continuous%20integration/badge.svg)
+[![ci](https://github.com/programad/polyavatar/workflows/continuous%20integration/badge.svg)](https://github.com/programad/polyavatar/actions)
 [![npm](https://img.shields.io/npm/v/polyavatar)](https://www.npmjs.com/package/polyavatar)
 
 
