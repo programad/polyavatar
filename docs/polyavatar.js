@@ -12,7 +12,13 @@
 }(this, function (pluginName) {
 
   'use strict';
-  var progressBarColor = '#4ff461';
+  const progressBarColorDefault = '#4ff461';
+  const borderColorDefault = '#1d2333';
+  const progressBgColorDefault = '#293249';
+  const pictureBgDefault = '#000';
+  const onlineColorDefault = '#40d04f';
+  const offlineColorDefault = '#888888';
+  const levelBgColorDefault = '#7750f8';
 
   var defaults = {
     selector: '.polyavatar',
@@ -25,7 +31,12 @@
     hasImage: false,
     showProgress: true,
     border: true,
-    progressBarColor: progressBarColor
+    progressBarColor: progressBarColorDefault,
+    borderColor: borderColorDefault,
+    progressBgColor: progressBgColorDefault,
+    onlineColor: onlineColorDefault,
+    offlineColor: offlineColorDefault,
+    levelBgColor: levelBgColorDefault
   };
 
   /**
@@ -131,17 +142,17 @@
     }
   }
 
-  function drawCircle(ctx, centerX, centerY, radius, style, borderColor) {
+  function drawCircle(ctx, centerX, centerY, radius, style, strokeStyle) {
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
     ctx.fillStyle = style;
     ctx.fill();
 
-    ctx.lineWidth = radius / 10;
-    if (borderColor === undefined) {
+    ctx.lineWidth = radius / 4.5;
+    if (strokeStyle === undefined) {
       ctx.strokeStyle = shadeColor(ctx.fillStyle, -30);
     } else {
-      ctx.strokeStyle = borderColor;
+      ctx.strokeStyle = strokeStyle;
     }
 
     ctx.stroke();
@@ -212,35 +223,32 @@
     if (options.animated === false) {
       currentProgress = percentage;
     }
-    //console.log(options)
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    fillRoundedPath(canvas, ctx, outerSpace, polyRadius, polyRadius, bgPoly, width, cornerRadius, "#1d2333");
-    fillRoundedPath(canvas, ctx, outerSpace, polyRadius, polyRadius, hexPoly, width, cornerRadius, "#293249");
-    fillRoundedPath(canvas, ctx, outerSpace, polyRadius, polyRadius, hexPolyInner, width, cornerRadius - barWidth * inset * 2, "#000", options.img);
+    fillRoundedPath(canvas, ctx, outerSpace, polyRadius, polyRadius, bgPoly, width, cornerRadius, options.borderColor);
+    fillRoundedPath(canvas, ctx, outerSpace, polyRadius, polyRadius, hexPoly, width, cornerRadius, options.progressBgColor);
+    fillRoundedPath(canvas, ctx, outerSpace, polyRadius, polyRadius, hexPolyInner, width, cornerRadius - barWidth * inset * 2, pictureBgDefault, options.img);
     ctx.lineDashOffset = approxLineLen - currentProgress * approxLineLen;
 
     if (options.showProgress === true) {
       if (options.animated === true) {
-        strokeRoundedPath(ctx, polyRadius, polyRadius, hexBar, width, cornerRadius - barWidth * inset, progressBarColor, barWidth);
+        strokeRoundedPath(ctx, polyRadius, polyRadius, hexBar, width, cornerRadius - barWidth * inset, options.progressBarColor, barWidth);
 
         if (currentProgress < percentage) {
           progress += 0.01;
           requestAnimationFrame(function () {
-            render(canvas, ctx, options, outerSpace, polyRadius, bgPoly, hexPoly, hexPolyInner, hexBar, width, barWidth, inset, cornerRadius, approxLineLen, percentage, progress);
+            render(canvas, ctx, options, outerSpace, polyRadius, bgPoly, hexPoly, hexPolyInner, hexBar, width, barWidth, inset, cornerRadius, approxLineLen, percentage, progress, options.progressBarColor);
           });
         }
       } else {
-        strokeRoundedPath(ctx, polyRadius, polyRadius, hexBar, width, cornerRadius - barWidth * inset, progressBarColor, barWidth);
+        strokeRoundedPath(ctx, polyRadius, polyRadius, hexBar, width, cornerRadius - barWidth * inset, options.progressBarColor, barWidth);
       }
     }
 
     if (options.online !== undefined) {
-      var borderColor = outerSpace > 0 ? "#1d2333" : "#293249";
-      fillStatusCircle(canvas, ctx, 0, 0, canvas.width / 12, (options.online ? 'green' : 'gray'), borderColor);
+      fillStatusCircle(canvas, ctx, 0, 0, canvas.width / 12, (options.online ? options.onlineColor : options.offlineColor), options.borderColor);
     }
-    //fillLevelCircle(canvas, ctx, 0, 0, canvas.width/10, "#1d2333");
 
     if (options.sides > 4 && outerSpace > 0 && options.levelNumber > 0) {
       var miniPolygonRadius = polyRadius / 3;
@@ -248,8 +256,8 @@
       var pos = width - (width / 3.65);
       const bgLevelNumber = polygon(options.sides, miniPolygonRadius, 1, options.rotation);
       const bgLevelNumberInner = polygon(options.sides, miniInnerPolygonRadius, 1, options.rotation);
-      fillRoundedPath(canvas, ctx, outerSpace, pos, pos, bgLevelNumber, width, cornerRadius, "#1d2333");
-      fillRoundedPath(canvas, ctx, outerSpace, pos, pos, bgLevelNumberInner, width, cornerRadius, "#7750f8");
+      fillRoundedPath(canvas, ctx, outerSpace, pos, pos, bgLevelNumber, width, cornerRadius, options.borderColor);
+      fillRoundedPath(canvas, ctx, outerSpace, pos, pos, bgLevelNumberInner, width, cornerRadius, options.levelBgColor);
       fillLevelNumber(ctx, options.levelNumber, pos, miniPolygonRadius);
     }
   }
@@ -290,11 +298,6 @@
       if (this.options.sides < 3) {
         this.options.sides = 3;
       }
-
-      if (this.options.progressBarColor !== progressBarColor) {
-        progressBarColor = this.options.progressBarColor;
-      }
-
 
       for (var i = 0; i < this.elements.length; i++) {
         const canvas = this.elements[i];

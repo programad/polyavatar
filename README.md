@@ -39,11 +39,16 @@ The plugin can be configured using the one of a combination of the following opt
 | sides            |     6     |           | How many sides (more than 2, of course) the polygon should have.                                    |
 | image            |     ''    |           | Sets the image to be rendered inside the polygon.                                                   |
 | percentage       | 0.98      |           | The percentage of the progress bar around the image.                                                |
-| progressBarColor | '#4ff461' |           | The color of the progress bar.                                                                      |
 | showProgress     | true      |           | If the avatar should render the progressbar                                                         |
 | animated         | true      |           | If the progress bar will be animated until it reaches the target percentage                         |
 | online           | undefined |           | The online status of the user. Omitting it will not generate the status indicator.                  |
 | levelNumber      | undefined |           | The level of the user. It will be shown as a smal polygon on the right with the level number in it. |
+| progressBarColor | '#4ff461' |           | The color of the progress bar.                                                                      |
+| progressBgColor  | '#293249' |           | The color of the background of the progress bar.                                                    |
+| borderColor      | '#1d2333' |           | The color of the border.                                                                            |
+| onlineColor      | '#40d04f' |           | The color of the online indicator.                                                                  |
+| offlineColor     | '#888888' |           | The color of the offline indicator.                                                                 |
+| levelBgColor     | '#7750f8' |           | The color of the background of the level indicator.                                                 |
 
 ## Contributing
 Please read this [style guidelines](https://github.com/joemottershaw/style-guidelines) documentation project and please follow the [contribution guidelines](./.github/CONTRIBUTING.md) and [code of conduct](./.github/CODE_OF_CONDUCT.md).

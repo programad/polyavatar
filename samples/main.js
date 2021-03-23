@@ -7,8 +7,20 @@ document.addEventListener("DOMContentLoaded", function () {
     var simple = new PolygonAvatar({
         selector: '.polyavatar',
         image: 'https://res.cloudinary.com/ludustack/image/upload/f_auto,q_auto/v1/0c7e18b2-3682-444d-a62b-30e311e76891/profileimage_0c7e18b2-3682-444d-a62b-30e311e76891_Personal',
-        percentage: Math.round(Math.random() * 100) / 100,        
-        progressBarColor: '#aaa',
+        percentage: Math.round(Math.random() * 100) / 100,
+        online: true,
+        levelNumber: getRandomInt(99)
+    });
+
+    
+    var customColors = new PolygonAvatar({
+        selector: '.polyavatarcustomcolors',
+        image: 'https://res.cloudinary.com/ludustack/image/upload/f_auto,q_auto/v1/0c7e18b2-3682-444d-a62b-30e311e76891/profileimage_0c7e18b2-3682-444d-a62b-30e311e76891_Personal',
+        percentage: Math.round(Math.random() * 100) / 100,
+        progressBarColor: 'yellow',
+        progressBgColor: 'blue',
+        borderColor: 'green',
+        levelBgColor: 'orange',
         online: true,
         levelNumber: getRandomInt(99)
     });
