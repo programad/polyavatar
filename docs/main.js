@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var noProgress  = new PolygonAvatar({
         selector: '.polyavatarnoprogress',
-        image: '../docs/avatar3.jpg',
+        image: 'avatar3.jpg',
         showProgress: false,
         online: true,
         levelNumber: getRandomInt(99)
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var noBorder  = new PolygonAvatar({
         selector: '.polyavatarnoborder',
-        image: '../docs/avatar4.jpg',
+        image: 'avatar4.jpg',
         percentage: Math.round(Math.random() * 100) / 100,
         border: false,
         online: true,
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var triangles = new PolygonAvatar({
         selector: '.polyavatartriangle',
-        image: '../docs/avatar5.jpg',
+        image: 'avatar5.jpg',
         percentage: Math.round(Math.random() * 100) / 100,
         sides:3,
         online: true,
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var diamond = new PolygonAvatar({
         selector: '.polyavatardiamond',
-        image: '../docs/avatar6.jpg',
+        image: 'avatar6.jpg',
         percentage: Math.round(Math.random() * 100) / 100,
         sides:4,
         online: true
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var pentagon = new PolygonAvatar({
         selector: '.polyavatarpentagon',
-        image: '../docs/avatar7.jpg',
+        image: 'avatar7.jpg',
         percentage: Math.round(Math.random() * 100) / 100,
         sides:5,
         online: true,
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var hexagon = new PolygonAvatar({
         selector: '.polyavatarhexagon',
-        image: '../docs/avatar8.jpg',
+        image: 'avatar8.jpg',
         percentage: Math.round(Math.random() * 100) / 100,
         sides:6,
         online: true,
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var heptagon = new PolygonAvatar({
         selector: '.polyavatarheptagon',
-        image: '../docs/avatar9.jpg',
+        image: 'avatar9.jpg',
         percentage: Math.round(Math.random() * 100) / 100,
         sides:7,
         online: true,
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var octagon = new PolygonAvatar({
         selector: '.polyavataroctagon',
-        image: '../docs/avatar10.jpg',
+        image: 'avatar10.jpg',
         percentage: Math.round(Math.random() * 100) / 100,
         sides:8,
         online: true,
