@@ -200,12 +200,35 @@
   }
 
 
-  function fillLevelNumber(ctx, number, pos, miniPolygonRadius) {
+  function fillLevelNumber(ctx, width, number, pos, miniPolygonRadius) {
+      let xFactor = number < 10 ? 4 : 2;
+      let yFactor = number < 10 ? 2.5 : 2.5;
+      
+      if(width <= 32){
+        xFactor = number < 10 ? 1 : 3;
+        yFactor = number < 10 ? 2.1 : 2;
+        miniPolygonRadius *= 1.1;
+      }
+      if(width <= 40){
+        xFactor = number < 10 ? 8 : 2.8;
+        yFactor = number < 10 ? 2.1 : 2.3;
+        miniPolygonRadius *= 1.2;
+      }
+      else if(width <= 64){
+        xFactor = number < 10 ? 5.5 : 2.1;
+        yFactor = number < 10 ? 2.5 : 2.5;
+        miniPolygonRadius *= 1.2;
+      }
+      else if(width <= 256){
+        xFactor = number < 10 ? 4 : 2;
+        yFactor = number < 10 ? 2.5 : 2.5;
+      }
+
       ctx.setTransform(1, 0, 0, 1, pos, pos);
       ctx.font = miniPolygonRadius + "px Arial";
       ctx.beginPath();
       ctx.fillStyle = "white";
-      ctx.fillText(number, 0 - miniPolygonRadius / 2, 0 + miniPolygonRadius / 2.5);
+      ctx.fillText(number, 0 - miniPolygonRadius / xFactor, 0 + miniPolygonRadius / yFactor);
       ctx.fill();
   }
 
@@ -251,14 +274,33 @@
     }
 
     if (options.sides > 4 && outerSpace > 0 && options.levelNumber > 0) {
-      var miniPolygonRadius = polyRadius / 3;
-      var miniInnerPolygonRadius = miniPolygonRadius * 0.8;
-      var pos = width - (width / 3.65);
+      let polyRadiusFactor = 3;
+      let miniPolygonRadiusFactor = 0.8;
+      let posFactor = 3.65;
+
+      if(width <= 32){
+      }
+      if(width <= 40){
+        polyRadiusFactor =  2;
+        miniPolygonRadiusFactor = 0.9;
+        posFactor = 3;
+      }
+      else if(width <= 64){
+        polyRadiusFactor =  2;
+        miniPolygonRadiusFactor = 0.9;
+        posFactor = 3;
+      }
+
+
+      const miniPolygonRadius = polyRadius / polyRadiusFactor;
+      const miniInnerPolygonRadius = miniPolygonRadius * miniPolygonRadiusFactor;
+      const pos = width - (width / posFactor);
+
       const bgLevelNumber = polygon(options.sides, miniPolygonRadius, 1, options.rotation);
       const bgLevelNumberInner = polygon(options.sides, miniInnerPolygonRadius, 1, options.rotation);
       fillRoundedPath(canvas, ctx, outerSpace, pos, pos, bgLevelNumber, width, cornerRadius, options.borderColor);
       fillRoundedPath(canvas, ctx, outerSpace, pos, pos, bgLevelNumberInner, width, cornerRadius, options.levelBgColor);
-      fillLevelNumber(ctx, options.levelNumber, pos, miniPolygonRadius);
+      fillLevelNumber(ctx, width, options.levelNumber, pos, miniPolygonRadius);
     }
   }
 
