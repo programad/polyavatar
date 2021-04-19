@@ -199,7 +199,6 @@
     drawCircle(ctx, centerX, centerY, radius, style);
   }
 
-
   function fillLevelNumber(ctx, width, number, pos, miniPolygonRadius) {
       let xFactor = number < 10 ? 4 : 2;
       let yFactor = number < 10 ? 2.5 : 2.5;
